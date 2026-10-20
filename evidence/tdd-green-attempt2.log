@@ -1,0 +1,143 @@
+WARNING: File `gltest.config.yaml` not found in the current directory, using default config, create a `gltest.config.yaml` file to manage multiple networks
+INFO: Clearing artifacts directory: artifacts
+INFO: Using the following configuration:
+INFO:   RPC URL: http://127.0.0.1:4000/api
+INFO:   Selected Network: localnet
+INFO:   Available networks: ['localnet', 'studionet', 'testnet_asimov', 'testnet_bradbury']
+INFO:   Selected chain type: localnet
+INFO:   Available chains: localnet, studionet, testnet_asimov, testnet_bradbury
+INFO:   Contracts directory: contracts
+INFO:   Artifacts directory: artifacts
+INFO:   Environment: .env
+INFO:   Default wait interval: 3000 ms
+INFO:   Default wait retries: 50
+INFO:   Leader only mode: False
+FF.........................                                              [100%]
+================================== FAILURES ===================================
+___________________ test_pair_creates_consensus_attestation ___________________
+
+direct_vm = VMContext(_sender=b'\xdc\x18\xaa=\xb8\xbc\x91\xa6\xe3\x90\xa3^}\x08\x11$o\xf3\xab\x01', _origin=None, _contract_addres...m_mocks_hit=set(), _live_web_handler=None, _live_llm_handler=None, _gl_call_hook=None, _traces=[], _trace_enabled=True)
+direct_deploy = <function direct_deploy.<locals>._deploy at 0x00000224B7ADEF20>
+
+    def test_pair_creates_consensus_attestation(direct_vm, direct_deploy):
+        """Catches missing both-resource consensus and missing verified transition."""
+        c = deployed(direct_vm, direct_deploy)
+        cid = open_one(c)
+        assert len(cid) == 64
+        proof = c.expected_proof(cid)
+        assert proof["audience"] == "demo-app"
+        assert proof["urls"] == [URL_A, URL_B]
+        assert proof["nonce"] == NONCE
+        serve(direct_vm, proof)
+        c.verify(cid)
+        assert c.get_challenge(cid)["status"] == "VERIFIED"
+        assert c.is_active(cid, "demo-app") is True
+>       assert direct_vm.run_validator() is True
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_reciprocal.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\..\tooling\.venv\Lib\site-packages\gltest\direct\vm.py:383: in run_validator
+    return validator_fn(wrapped)
+           ^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Administrator\.cache\gltest-direct\extracted\v0.2.12\py-lib-genlayer-std\11rhn002yfajawsz7fai6mykznbxkxs6l91iskj5cm82c92qhy3v\genlayer\gl\eq_principle.py:36: in validator_fn
+    my_res = vm.spawn_sandbox(fn)
+             ^^^^^^^^^^^^^^^^^^^^
+C:\Users\Administrator\.cache\gltest-direct\extracted\v0.2.12\py-lib-genlayer-std\11rhn002yfajawsz7fai6mykznbxkxs6l91iskj5cm82c92qhy3v\genlayer\gl\_internal\__init__.py:22: in eager
+    return fn(*args, **kwargs).get()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Administrator\.cache\gltest-direct\extracted\v0.2.12\py-lib-genlayer-std\11rhn002yfajawsz7fai6mykznbxkxs6l91iskj5cm82c92qhy3v\genlayer\py\types.py:118: in get
+    raise self._exc
+C:\Users\Administrator\.cache\gltest-direct\extracted\v0.2.12\py-lib-genlayer-std\11rhn002yfajawsz7fai6mykznbxkxs6l91iskj5cm82c92qhy3v\genlayer\py\types.py:114: in get
+    self._res = ev()
+                ^^^^
+C:\Users\Administrator\.cache\gltest-direct\extracted\v0.2.12\py-lib-genlayer-std\11rhn002yfajawsz7fai6mykznbxkxs6l91iskj5cm82c92qhy3v\genlayer\gl\_internal\gl_call.py:37: in run
+    return after(rest)
+           ^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+data = b'\x0e\x02ok\x00'
+
+    def _decode_sub_vm_result_retn(
+    	data: collections.abc.Buffer,
+    ) -> Result:
+    	mem = memoryview(data)
+    	if mem[0] == ResultCode.USER_ERROR:
+    		return UserError(str(mem[1:], encoding='utf8'))
+    	if mem[0] == ResultCode.RETURN:
+    		return Return(calldata.decode(mem[1:]))
+    	if mem[0] == ResultCode.VM_ERROR:
+    		return VMError(str(mem[1:], encoding='utf8'))
+>   	assert False, f'unknown type {mem[0]}'
+            ^^^^^
+E    AssertionError: unknown type 14
+
+C:\Users\Administrator\.cache\gltest-direct\extracted\v0.2.12\py-lib-genlayer-std\11rhn002yfajawsz7fai6mykznbxkxs6l91iskj5cm82c92qhy3v\genlayer\gl\vm.py:82: AssertionError
+______________ test_validator_refetches_changed_second_resource _______________
+
+direct_vm = VMContext(_sender=b'\xdc\x18\xaa=\xb8\xbc\x91\xa6\xe3\x90\xa3^}\x08\x11$o\xf3\xab\x01', _origin=None, _contract_addres...m_mocks_hit=set(), _live_web_handler=None, _live_llm_handler=None, _gl_call_hook=None, _traces=[], _trace_enabled=True)
+direct_deploy = <function direct_deploy.<locals>._deploy at 0x00000224B7C728E0>
+
+    def test_validator_refetches_changed_second_resource(direct_vm, direct_deploy):
+        """Catches leader-only or schema-only validation."""
+        c = deployed(direct_vm, direct_deploy)
+        cid = open_one(c)
+        proof = c.expected_proof(cid)
+        serve(direct_vm, proof)
+        c.verify(cid)
+        direct_vm.clear_mocks()
+        direct_vm.mock_web(r"raw\.githubusercontent\.com", {"status": 200, "body": json.dumps(proof)})
+        forged = dict(proof, audience="other-app")
+        direct_vm.mock_web(r"gist\.githubusercontent\.com", {"status": 200, "body": json.dumps(forged)})
+>       assert direct_vm.run_validator() is False
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_reciprocal.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\..\tooling\.venv\Lib\site-packages\gltest\direct\vm.py:383: in run_validator
+    return validator_fn(wrapped)
+           ^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Administrator\.cache\gltest-direct\extracted\v0.2.12\py-lib-genlayer-std\11rhn002yfajawsz7fai6mykznbxkxs6l91iskj5cm82c92qhy3v\genlayer\gl\eq_principle.py:36: in validator_fn
+    my_res = vm.spawn_sandbox(fn)
+             ^^^^^^^^^^^^^^^^^^^^
+C:\Users\Administrator\.cache\gltest-direct\extracted\v0.2.12\py-lib-genlayer-std\11rhn002yfajawsz7fai6mykznbxkxs6l91iskj5cm82c92qhy3v\genlayer\gl\_internal\__init__.py:22: in eager
+    return fn(*args, **kwargs).get()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Administrator\.cache\gltest-direct\extracted\v0.2.12\py-lib-genlayer-std\11rhn002yfajawsz7fai6mykznbxkxs6l91iskj5cm82c92qhy3v\genlayer\py\types.py:118: in get
+    raise self._exc
+C:\Users\Administrator\.cache\gltest-direct\extracted\v0.2.12\py-lib-genlayer-std\11rhn002yfajawsz7fai6mykznbxkxs6l91iskj5cm82c92qhy3v\genlayer\py\types.py:114: in get
+    self._res = ev()
+                ^^^^
+C:\Users\Administrator\.cache\gltest-direct\extracted\v0.2.12\py-lib-genlayer-std\11rhn002yfajawsz7fai6mykznbxkxs6l91iskj5cm82c92qhy3v\genlayer\gl\_internal\gl_call.py:37: in run
+    return after(rest)
+           ^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+data = b'\x0e\x02ok\x00'
+
+    def _decode_sub_vm_result_retn(
+    	data: collections.abc.Buffer,
+    ) -> Result:
+    	mem = memoryview(data)
+    	if mem[0] == ResultCode.USER_ERROR:
+    		return UserError(str(mem[1:], encoding='utf8'))
+    	if mem[0] == ResultCode.RETURN:
+    		return Return(calldata.decode(mem[1:]))
+    	if mem[0] == ResultCode.VM_ERROR:
+    		return VMError(str(mem[1:], encoding='utf8'))
+>   	assert False, f'unknown type {mem[0]}'
+            ^^^^^
+E    AssertionError: unknown type 14
+
+C:\Users\Administrator\.cache\gltest-direct\extracted\v0.2.12\py-lib-genlayer-std\11rhn002yfajawsz7fai6mykznbxkxs6l91iskj5cm82c92qhy3v\genlayer\gl\vm.py:82: AssertionError
+============================== warnings summary ===============================
+tests/test_reciprocal.py::test_pair_creates_consensus_attestation
+tests/test_reciprocal.py::test_validator_refetches_changed_second_resource
+  C:\Users\Administrator\.cache\gltest-direct\extracted\v0.2.12\py-lib-genlayer-std\11rhn002yfajawsz7fai6mykznbxkxs6l91iskj5cm82c92qhy3v\genlayer\gl\_internal\gl_call.py:30: RuntimeWarning: gl.sandbox is not fully isolated in direct test mode.
+    fd = _imp_raw(calldata.encode(data))
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_reciprocal.py::test_pair_creates_consensus_attestation - As...
+FAILED tests/test_reciprocal.py::test_validator_refetches_changed_second_resource
+2 failed, 25 passed, 2 warnings in 2.43s

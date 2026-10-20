@@ -1,0 +1,30 @@
+{
+  "recorded_at": "2026-10-20T18:19:33.026Z",
+  "network": "GenLayer Studionet",
+  "chain_id": 61999,
+  "execution_mode": "Normal (Full Consensus)",
+  "deployer": "0x30e3892feeE48f8fa96FB272ae6d9d274940B11b",
+  "name": "ReciprocalProof",
+  "file": "reciprocal_proof.py",
+  "sourceSha256": "4f28974591c9a3e6282095eef7765f6f47abcad63d913c5b94dc3127fd6fceca",
+  "contract": "0x08d8B6bd6bC15dbdcF9A8cE4924C793fe624406F",
+  "transaction": "0xb55168a63f41c7e7cabc4a5a31df9e1f13f4e6d261106852b631ecc3a62caa9e",
+  "status": "FINALIZED",
+  "result": "SUCCESS",
+  "constructorArgs": [
+    [
+      "raw.githubusercontent.com",
+      "gist.githubusercontent.com"
+    ]
+  ],
+  "verified_live": [
+    "constructor deployment FINALIZED/SUCCESS"
+  ],
+  "not_verified_live": [
+    "nondeterministic write flows",
+    "real web/LLM consensus",
+    "full lifecycle",
+    "gas costs"
+  ],
+  "source_evidence_file": "outputs/genlayer-builders-2026-10-21/02-independent-ic-deployments.json"
+}

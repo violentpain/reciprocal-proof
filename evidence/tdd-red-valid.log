@@ -1,0 +1,53 @@
+WARNING: File `gltest.config.yaml` not found in the current directory, using default config, create a `gltest.config.yaml` file to manage multiple networks
+INFO: Clearing artifacts directory: artifacts
+INFO: Using the following configuration:
+INFO:   RPC URL: http://127.0.0.1:4000/api
+INFO:   Selected Network: localnet
+INFO:   Available networks: ['localnet', 'studionet', 'testnet_asimov', 'testnet_bradbury']
+INFO:   Selected chain type: localnet
+INFO:   Available chains: localnet, studionet, testnet_asimov, testnet_bradbury
+INFO:   Contracts directory: contracts
+INFO:   Artifacts directory: artifacts
+INFO:   Environment: .env
+INFO:   Default wait interval: 3000 ms
+INFO:   Default wait retries: 50
+INFO:   Leader only mode: False
+F                                                                        [100%]
+================================== FAILURES ===================================
+___________________ test_pair_creates_consensus_attestation ___________________
+
+direct_vm = VMContext(_sender=b'\xdc\x18\xaa=\xb8\xbc\x91\xa6\xe3\x90\xa3^}\x08\x11$o\xf3\xab\x01', _origin=None, _contract_addres...m_mocks_hit=set(), _live_web_handler=None, _live_llm_handler=None, _gl_call_hook=None, _traces=[], _trace_enabled=True)
+direct_deploy = <function direct_deploy.<locals>._deploy at 0x00000201C4A82AC0>
+
+    def test_pair_creates_consensus_attestation(direct_vm, direct_deploy):
+        """Catches missing both-resource consensus and missing verified transition."""
+        c = deployed(direct_vm, direct_deploy)
+>       cid = open_one(c)
+              ^^^^^^^^^^^
+
+tests\test_reciprocal.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_reciprocal.py:15: in open_one
+    return contract.open_challenge(URL_A, URL_B, "demo-app", nonce, 3600)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\tooling\.venv\Lib\site-packages\gltest\direct\loader.py:432: in _wrapped
+    return attr(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <_contract_reciprocal_proof.ReciprocalProof object at 0x00000201C4B6D670>
+url_a = 'https://raw.githubusercontent.com/example/proofs/main/a.json'
+url_b = 'https://gist.githubusercontent.com/example/123/raw/b.json'
+audience = 'demo-app'
+nonce = '1212121212121212121212121212121212121212121212121212121212121212'
+ttl_seconds = 3600
+
+    @gl.public.write
+    def open_challenge(self, url_a: str, url_b: str, audience: str, nonce: str, ttl_seconds: int) -> str:
+>       raise gl.vm.UserError("NOT_IMPLEMENTED")
+E       genlayer.gl.vm.UserError: UserError(message='NOT_IMPLEMENTED')
+
+reciprocal_proof.py:10: UserError
+=========================== short test summary info ===========================
+FAILED tests/test_reciprocal.py::test_pair_creates_consensus_attestation - ge...
+1 failed in 0.56s

@@ -1,0 +1,1 @@
+{"ok":false,"lint":{"ok":true,"passed":3},"validate":{"ok":false,"errors":[{"code":"E101","msg":"Failed to load SDK: Compressed file ended before the end-of-stream marker was reached"}]}}

@@ -1,0 +1,155 @@
+WARNING: File `gltest.config.yaml` not found in the current directory, using default config, create a `gltest.config.yaml` file to manage multiple networks
+INFO: Clearing artifacts directory: artifacts
+INFO: Using the following configuration:
+INFO:   RPC URL: http://127.0.0.1:4000/api
+INFO:   Selected Network: localnet
+INFO:   Available networks: ['localnet', 'studionet', 'testnet_asimov', 'testnet_bradbury']
+INFO:   Selected chain type: localnet
+INFO:   Available chains: localnet, studionet, testnet_asimov, testnet_bradbury
+INFO:   Contracts directory: contracts
+INFO:   Artifacts directory: artifacts
+INFO:   Environment: .env
+INFO:   Default wait interval: 3000 ms
+INFO:   Default wait retries: 50
+INFO:   Leader only mode: False
+FF........................F                                              [100%]
+================================== FAILURES ===================================
+___________________ test_pair_creates_consensus_attestation ___________________
+
+direct_vm = VMContext(_sender=b'\xdc\x18\xaa=\xb8\xbc\x91\xa6\xe3\x90\xa3^}\x08\x11$o\xf3\xab\x01', _origin=None, _contract_addres...m_mocks_hit=set(), _live_web_handler=None, _live_llm_handler=None, _gl_call_hook=None, _traces=[], _trace_enabled=True)
+direct_deploy = <function direct_deploy.<locals>._deploy at 0x000001574088F1A0>
+
+    def test_pair_creates_consensus_attestation(direct_vm, direct_deploy):
+        """Catches missing both-resource consensus and missing verified transition."""
+        c = deployed(direct_vm, direct_deploy)
+        cid = open_one(c)
+        assert len(cid) == 64
+        proof = c.expected_proof(cid)
+        assert proof["audience"] == "demo-app"
+        assert proof["urls"] == [URL_A, URL_B]
+        assert proof["nonce"] == NONCE
+        serve(direct_vm, proof)
+        c.verify(cid)
+        assert c.get_challenge(cid)["status"] == "VERIFIED"
+        assert c.is_active(cid, "demo-app") is True
+>       assert direct_vm.run_validator() is True
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_reciprocal.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\..\tooling\.venv\Lib\site-packages\gltest\direct\vm.py:383: in run_validator
+    return validator_fn(wrapped)
+           ^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Administrator\.cache\gltest-direct\extracted\v0.2.12\py-lib-genlayer-std\11rhn002yfajawsz7fai6mykznbxkxs6l91iskj5cm82c92qhy3v\genlayer\gl\eq_principle.py:36: in validator_fn
+    my_res = vm.spawn_sandbox(fn)
+             ^^^^^^^^^^^^^^^^^^^^
+C:\Users\Administrator\.cache\gltest-direct\extracted\v0.2.12\py-lib-genlayer-std\11rhn002yfajawsz7fai6mykznbxkxs6l91iskj5cm82c92qhy3v\genlayer\gl\_internal\__init__.py:22: in eager
+    return fn(*args, **kwargs).get()
+           ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+fn = <function ReciprocalProof.verify.<locals>.independently_check_pair at 0x00000157409B7380>
+allow_write_ops = False
+
+    @_lazy_api
+    def spawn_sandbox[T: calldata.Decoded](
+    	fn: typing.Callable[[], T], *, allow_write_ops: bool = False
+    ) -> Lazy[Return[T] | VMError | UserError]:
+    	"""
+    	Runs a function in an isolated sandbox environment.
+    
+    	The function is executed in a separate VM instance with controlled permissions.
+    	This provides isolation and security for potentially unsafe operations.
+    	Determinism of spawned VM matches the determinism of the current VM.
+    
+    	:param fn: Function to execute in the sandbox (must be serializable with cloudpickle)
+    	:param allow_write_ops: Whether to allow write operations in the sandbox. Only effective if current VM has corresponding permission
+    
+    	Example:
+    		>>> result = spawn_sandbox(lambda: risky_computation())
+    		>>> safe_value = unpack_result(result)
+    	"""
+>   	import cloudpickle
+E    ModuleNotFoundError: No module named 'cloudpickle'
+
+C:\Users\Administrator\.cache\gltest-direct\extracted\v0.2.12\py-lib-genlayer-std\11rhn002yfajawsz7fai6mykznbxkxs6l91iskj5cm82c92qhy3v\genlayer\gl\vm.py:129: ModuleNotFoundError
+______________ test_validator_refetches_changed_second_resource _______________
+
+direct_vm = VMContext(_sender=b'\xdc\x18\xaa=\xb8\xbc\x91\xa6\xe3\x90\xa3^}\x08\x11$o\xf3\xab\x01', _origin=None, _contract_addres...m_mocks_hit=set(), _live_web_handler=None, _live_llm_handler=None, _gl_call_hook=None, _traces=[], _trace_enabled=True)
+direct_deploy = <function direct_deploy.<locals>._deploy at 0x00000157409E11C0>
+
+    def test_validator_refetches_changed_second_resource(direct_vm, direct_deploy):
+        """Catches leader-only or schema-only validation."""
+        c = deployed(direct_vm, direct_deploy)
+        cid = open_one(c)
+        proof = c.expected_proof(cid)
+        serve(direct_vm, proof)
+        c.verify(cid)
+        direct_vm.clear_mocks()
+        direct_vm.mock_web(r"raw\.githubusercontent\.com", {"status": 200, "body": json.dumps(proof)})
+        forged = dict(proof, audience="other-app")
+        direct_vm.mock_web(r"gist\.githubusercontent\.com", {"status": 200, "body": json.dumps(forged)})
+>       assert direct_vm.run_validator() is False
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_reciprocal.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\..\tooling\.venv\Lib\site-packages\gltest\direct\vm.py:383: in run_validator
+    return validator_fn(wrapped)
+           ^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Administrator\.cache\gltest-direct\extracted\v0.2.12\py-lib-genlayer-std\11rhn002yfajawsz7fai6mykznbxkxs6l91iskj5cm82c92qhy3v\genlayer\gl\eq_principle.py:36: in validator_fn
+    my_res = vm.spawn_sandbox(fn)
+             ^^^^^^^^^^^^^^^^^^^^
+C:\Users\Administrator\.cache\gltest-direct\extracted\v0.2.12\py-lib-genlayer-std\11rhn002yfajawsz7fai6mykznbxkxs6l91iskj5cm82c92qhy3v\genlayer\gl\_internal\__init__.py:22: in eager
+    return fn(*args, **kwargs).get()
+           ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+fn = <function ReciprocalProof.verify.<locals>.independently_check_pair at 0x0000015740BDF880>
+allow_write_ops = False
+
+    @_lazy_api
+    def spawn_sandbox[T: calldata.Decoded](
+    	fn: typing.Callable[[], T], *, allow_write_ops: bool = False
+    ) -> Lazy[Return[T] | VMError | UserError]:
+    	"""
+    	Runs a function in an isolated sandbox environment.
+    
+    	The function is executed in a separate VM instance with controlled permissions.
+    	This provides isolation and security for potentially unsafe operations.
+    	Determinism of spawned VM matches the determinism of the current VM.
+    
+    	:param fn: Function to execute in the sandbox (must be serializable with cloudpickle)
+    	:param allow_write_ops: Whether to allow write operations in the sandbox. Only effective if current VM has corresponding permission
+    
+    	Example:
+    		>>> result = spawn_sandbox(lambda: risky_computation())
+    		>>> safe_value = unpack_result(result)
+    	"""
+>   	import cloudpickle
+E    ModuleNotFoundError: No module named 'cloudpickle'
+
+C:\Users\Administrator\.cache\gltest-direct\extracted\v0.2.12\py-lib-genlayer-std\11rhn002yfajawsz7fai6mykznbxkxs6l91iskj5cm82c92qhy3v\genlayer\gl\vm.py:129: ModuleNotFoundError
+______________________ test_expiry_boundary_and_audience ______________________
+
+direct_vm = VMContext(_sender=b'\xdc\x18\xaa=\xb8\xbc\x91\xa6\xe3\x90\xa3^}\x08\x11$o\xf3\xab\x01', _origin=None, _contract_addres...m_mocks_hit=set(), _live_web_handler=None, _live_llm_handler=None, _gl_call_hook=None, _traces=[], _trace_enabled=True)
+direct_deploy = <function direct_deploy.<locals>._deploy at 0x00000157419F0400>
+
+    def test_expiry_boundary_and_audience(direct_vm, direct_deploy):
+        c = deployed(direct_vm, direct_deploy)
+        cid = open_one(c)
+        serve(direct_vm, c.expected_proof(cid))
+        c.verify(cid)
+        assert c.is_active(cid, "another-app") is False
+        direct_vm.warp("2026-10-21T01:00:00Z")
+>       assert c.is_active(cid, "demo-app") is False
+E       AssertionError: assert True is False
+E        +  where True = <function ReciprocalProof.is_active at 0x0000015741B5A020>('887bc58b677e71ee7562389b22dd7b0cbcc106ccde4b1dcf084176025caed869', 'demo-app')
+E        +    where <function ReciprocalProof.is_active at 0x0000015741B5A020> = <CalldataProxy for <_contract_reciprocal_proof.ReciprocalProof object at 0x0000015741B376E0>>.is_active
+
+tests\test_reciprocal.py:108: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_reciprocal.py::test_pair_creates_consensus_attestation - Mo...
+FAILED tests/test_reciprocal.py::test_validator_refetches_changed_second_resource
+FAILED tests/test_reciprocal.py::test_expiry_boundary_and_audience - Assertio...
+3 failed, 24 passed in 2.28s

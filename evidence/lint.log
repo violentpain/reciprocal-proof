@@ -1,0 +1,77 @@
+Warning: could not resolve latest GenVM version (HTTP Error 403: rate limit exceeded); falling back to v0.2.16
+
+Downloading: 1.0/206.6 MB (0%)
+Downloading: 2.0/206.6 MB (0%)
+Downloading: 3.0/206.6 MB (1%)
+Downloading: 4.0/206.6 MB (1%)
+Downloading: 5.0/206.6 MB (2%)
+Downloading: 6.0/206.6 MB (2%)
+Downloading: 7.0/206.6 MB (3%)
+Downloading: 8.0/206.6 MB (3%)
+Downloading: 9.0/206.6 MB (4%)
+Downloading: 10.0/206.6 MB (4%)
+Downloading: 11.0/206.6 MB (5%)
+Downloading: 12.0/206.6 MB (5%)
+Downloading: 13.0/206.6 MB (6%)
+Downloading: 14.0/206.6 MB (6%)
+Downloading: 15.0/206.6 MB (7%)
+Downloading: 16.0/206.6 MB (7%)
+Downloading: 17.0/206.6 MB (8%)
+Downloading: 18.0/206.6 MB (8%)
+Downloading: 19.0/206.6 MB (9%)
+Downloading: 20.0/206.6 MB (9%)
+Downloading: 21.0/206.6 MB (10%)
+Downloading: 22.0/206.6 MB (10%)
+Downloading: 23.0/206.6 MB (11%)
+Downloading: 24.0/206.6 MB (11%)
+Downloading: 25.0/206.6 MB (12%)
+Downloading: 26.0/206.6 MB (12%)
+Downloading: 27.0/206.6 MB (13%)
+Downloading: 28.0/206.6 MB (13%)
+Downloading: 29.0/206.6 MB (14%)
+Downloading: 30.0/206.6 MB (14%)
+Downloading: 31.0/206.6 MB (15%)
+Downloading: 32.0/206.6 MB (15%)
+Downloading: 33.0/206.6 MB (15%)
+Downloading: 34.0/206.6 MB (16%)
+Downloading: 35.0/206.6 MB (16%)
+Downloading: 36.0/206.6 MB (17%)
+Downloading: 37.0/206.6 MB (17%)
+Downloading: 38.0/206.6 MB (18%)
+Downloading: 39.0/206.6 MB (18%)
+Downloading: 40.0/206.6 MB (19%)
+Downloading: 41.0/206.6 MB (19%)
+Downloading: 42.0/206.6 MB (20%)
+Downloading: 43.0/206.6 MB (20%)
+Downloading: 44.0/206.6 MB (21%)
+Downloading: 45.0/206.6 MB (21%)
+Downloading: 46.0/206.6 MB (22%)
+Downloading: 47.0/206.6 MB (22%)
+Downloading: 47.3/206.6 MB (22%)
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Documents\ChatGPT\web3\contributions\genlayer-2026-10-21\tooling\.venv\Scripts\genvm-lint.exe\__main__.py", line 7, in <module>
+  File "C:\Users\Administrator\Documents\ChatGPT\web3\contributions\genlayer-2026-10-21\tooling\.venv\Lib\site-packages\genvm_linter\cli.py", line 585, in cli
+    main()
+  File "C:\Users\Administrator\Documents\ChatGPT\web3\contributions\genlayer-2026-10-21\tooling\.venv\Lib\site-packages\click\core.py", line 1631, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Documents\ChatGPT\web3\contributions\genlayer-2026-10-21\tooling\.venv\Lib\site-packages\click\core.py", line 1552, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Documents\ChatGPT\web3\contributions\genlayer-2026-10-21\tooling\.venv\Lib\site-packages\click\core.py", line 2032, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Documents\ChatGPT\web3\contributions\genlayer-2026-10-21\tooling\.venv\Lib\site-packages\click\core.py", line 1415, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Documents\ChatGPT\web3\contributions\genlayer-2026-10-21\tooling\.venv\Lib\site-packages\click\core.py", line 910, in invoke
+    return callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Documents\ChatGPT\web3\contributions\genlayer-2026-10-21\tooling\.venv\Lib\site-packages\genvm_linter\cli.py", line 138, in check_cmd
+    click.echo(format_human_lint(lint_result))
+  File "C:\Users\Administrator\Documents\ChatGPT\web3\contributions\genlayer-2026-10-21\tooling\.venv\Lib\site-packages\click\utils.py", line 345, in echo
+    file.write(out)  # type: ignore
+    ^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'gbk' codec can't encode character '\u2713' in position 0: illegal multibyte sequence
